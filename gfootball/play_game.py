@@ -27,6 +27,8 @@ from absl import logging
 from gfootball.env import config
 from gfootball.env import football_env
 
+import time
+
 FLAGS = flags.FLAGS
 
 flags.DEFINE_string('players', 'keyboard:left_players=1',
@@ -34,9 +36,11 @@ flags.DEFINE_string('players', 'keyboard:left_players=1',
                     'player on the left by default')
 flags.DEFINE_string('level', '', 'Level to play')
 flags.DEFINE_enum('action_set', 'default', ['default', 'full'], 'Action set')
-flags.DEFINE_bool('real_time', True,
+flags.DEFINE_bool('real_time', False,
                   'If true, environment will slow down so humans can play.')
 flags.DEFINE_bool('render', True, 'Whether to do game rendering.')
+
+flags.DEFINE_integer('running_time', -1, 'How long to run play_game.py. If running_time=-1, the game runs until the user stops it.')
 
 
 def main(_):
@@ -55,11 +59,19 @@ def main(_):
   if FLAGS.render:
     env.render()
   env.reset()
+
+  start_time = time.time()
   try:
     while True:
       _, _, done, _ = env.step([])
       if done:
         env.reset()
+
+        elapsed_time = time.time() - start_time
+        logging.info('Time elapsed: {}'.format(elapsed_time))
+
+        if FLAGS.running_time > -1 and elapsed_time > FLAGS.running_time:
+          break
   except KeyboardInterrupt:
     logging.warning('Game stopped, writing dump...')
     env.write_dump('shutdown')

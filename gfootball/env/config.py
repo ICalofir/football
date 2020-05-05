@@ -91,8 +91,8 @@ class Config(object):
         'real_time': False,
         'tracesdir': '/tmp/dumps',
         'video_format': 'avi',
-        'video_quality_level': 0,  # 0 - low, 1 - medium, 2 - high
-        'write_video': False
+        'video_quality_level': 1,  # 0 - low, 1 - medium, 2 - high
+        'write_video': True
     }
     if values:
       self._values.update(values)
