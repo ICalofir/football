@@ -29,6 +29,8 @@ from gfootball.env import football_env
 
 import time
 
+from utils_custom.shared_info import get_shared_info_object
+
 FLAGS = flags.FLAGS
 
 flags.DEFINE_string('players', 'keyboard:left_players=1',
@@ -43,6 +45,8 @@ flags.DEFINE_bool('render', True, 'Whether to do game rendering.')
 flags.DEFINE_integer('running_time', -1, 'How long to run play_game.py. If running_time=-1, the game runs until the user stops it.')
 flags.DEFINE_bool('save_info', False,
                   'If true, save SharedInfo from the environment for every environment step. (be careful: agent step != environment step)')
+flags.DEFINE_string('dataset_path', '/home/ionutc/Documents/Repositories/Dissertation-2020/datasets/raw_dataset',
+                    'The path where the frames and their observations will be saved.')
 
 
 def main(_):
@@ -62,11 +66,15 @@ def main(_):
     env.render()
   env.reset()
 
+  shared_info = get_shared_info_object(FLAGS.dataset_path, FLAGS.save_info, FLAGS.render)
   start_time = time.time()
   try:
     while True:
-      _, _, done, _ = env.step([], save_info=FLAGS.save_info)
+      _, _, done, _ = env.step([], save_info=FLAGS.save_info, shared_info=shared_info)
       if done:
+        shared_info.save_info_on_disk()
+
+        shared_info = get_shared_info_object(FLAGS.dataset_path, FLAGS.save_info, FLAGS.render)
         env.reset()
 
         elapsed_time = time.time() - start_time

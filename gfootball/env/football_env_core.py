@@ -47,9 +47,6 @@ except ImportError:
   import cv2
 
 
-from utils_custom import shared_info
-
-
 class EnvState(object):
 
   def __init__(self):
@@ -137,7 +134,7 @@ class FootballEnvCore(object):
   def __del__(self):
     self.close()
 
-  def step(self, action, extra_data={}, save_info=False):
+  def step(self, action, extra_data={}, save_info=False, shared_info=None):
     assert self._env.state != GameState.game_done, (
         'Cant call step() once episode finished (call reset() instead)')
     assert self._env.state == GameState.game_running, (
@@ -172,7 +169,16 @@ class FootballEnvCore(object):
       enter_time = timeit.default_timer()
       if save_info:
         info = self._env.step_with_info()
-        shared_info.SharedInfo().save_info(info, info.shared_info_frames[0].step)
+        frame = self._env.get_frame()
+        frame = np.frombuffer(frame, dtype=np.uint8)
+        frame = np.reshape(frame, [1280, 720, 3])
+        frame = np.reshape(
+            np.concatenate([frame[:, :, 0], frame[:, :, 1], frame[:, :, 2]]),
+            [3, 720, 1280])
+        frame = np.transpose(frame, [1, 2, 0])
+        frame = np.flip(frame, 0)
+
+        shared_info.save_info(info, frame)
       else:
         self._env.step()
       self._steps_time += timeit.default_timer() - enter_time

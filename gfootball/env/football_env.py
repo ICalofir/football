@@ -164,7 +164,7 @@ class FootballEnv(gym.Env):
     actions = left_actions + right_actions
     return actions
 
-  def step(self, action, save_info=False):
+  def step(self, action, save_info=False, shared_info=None):
     action = self._action_to_list(action)
     if self._agent:
       self._agent.set_action(action)
@@ -174,7 +174,7 @@ class FootballEnv(gym.Env):
       ) == 0, 'step() received {} actions, but no agent is playing.'.format(
           len(action))
 
-    _, reward, done, info = self._env.step(self._get_actions(), save_info=save_info)
+    _, reward, done, info = self._env.step(self._get_actions(), save_info=save_info, shared_info=shared_info)
     score_reward = reward
     if self._agent:
       reward = ([reward] * self._agent.num_controlled_left_players() +
