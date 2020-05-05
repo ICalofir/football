@@ -274,6 +274,40 @@ struct ControllerInfo {
 
 // All the information about the current state (available from python).
 struct SharedInfo {
+  SharedInfo() { }
+  SharedInfo(const SharedInfo& f) {
+    ball_position = f.ball_position;
+    ball_direction = f.ball_direction;
+    ball_rotation = f.ball_rotation;
+    left_team = f.left_team;
+    right_team = f.right_team;
+    left_controllers = f.left_controllers;
+    right_controllers = f.right_controllers;
+    left_goals = f.left_goals;
+    right_goals = f.right_goals;
+    game_mode = f.game_mode;
+    is_in_play = f.is_in_play;
+    ball_owned_team = f.ball_owned_team;
+    ball_owned_player = f.ball_owned_player;
+    step = f.step;
+  }
+  bool operator == (const SharedInfo& f) const {
+    return ball_position == f.ball_position &&
+        ball_direction == f.ball_direction &&
+        ball_rotation == f.ball_rotation &&
+        left_team == f.left_team &&
+        right_team == f.right_team &&
+        left_controllers == f.left_controllers &&
+        right_controllers == f.right_controllers &&
+        left_goals == f.left_goals &&
+        right_goals == f.right_goals &&
+        game_mode == f.game_mode &&
+        is_in_play == f.is_in_play &&
+        ball_owned_team == f.ball_owned_team &&
+        ball_owned_player == f.ball_owned_player &&
+        step == f.step;
+  }
+
   Position ball_position;
   Position ball_direction;
   Position ball_rotation;
@@ -287,6 +321,10 @@ struct SharedInfo {
   int ball_owned_team = 0;
   int ball_owned_player = 0;
   int step = 0;
+};
+
+struct SharedInfoFrames {
+  std::vector<SharedInfo> shared_info_frames;
 };
 
 #endif

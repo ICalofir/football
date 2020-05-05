@@ -61,12 +61,14 @@ struct GameEnv {
   std::string set_state(const std::string& state);
   void tracker_setup(long start, long end) { GetTracker()->setup(start, end); }
   void step();
+  SharedInfoFrames step_with_info();
   void ProcessState(EnvState* state);
   ScenarioConfig& config();
 
  private:
   void setConfig(ScenarioConfig& scenario_config);
   void do_step(int count);
+  void do_step_with_info(int count, SharedInfoFrames& info_frames);
   void getObservations();
   AIControlledKeyboard* keyboard_ = nullptr;
   bool disable_graphics_ = false;

@@ -55,6 +55,16 @@ class GameEnv_Python : public GameEnv {
     Py_BLOCK_THREADS;
   }
 
+  SharedInfoFrames step_with_info_python() {
+    ContextHolder c(this);
+    PyThreadState* _save = NULL;
+    Py_UNBLOCK_THREADS;
+    SharedInfoFrames info = step_with_info();
+    Py_BLOCK_THREADS;
+
+    return info;
+  }
+
   void render_python(bool swap_buffer) {
     ContextHolder c(this);
     PyThreadState* _save = NULL;
@@ -84,6 +94,9 @@ BOOST_PYTHON_MODULE(_gameplayfootball) {
 
   class_<std::vector<PlayerInfo> >("PlayerInfoVec")
       .def(vector_indexing_suite<std::vector<PlayerInfo> >());
+
+  class_<std::vector<SharedInfo> >("SharedInfoVec")
+      .def(vector_indexing_suite<std::vector<SharedInfo> >());
 
   class_<StringVector>("StringVector")
       .def(boost::python::vector_indexing_suite<StringVector>());
@@ -122,6 +135,9 @@ BOOST_PYTHON_MODULE(_gameplayfootball) {
       .def_readonly("game_mode", &SharedInfo::game_mode)
       .def_readonly("step", &SharedInfo::step);
 
+  class_<SharedInfoFrames>("SharedInfoFrames")
+      .def_readonly("shared_info_frames", &SharedInfoFrames::shared_info_frames);
+
   enum_<GameState>("GameState")
       .value("game_created", GameState::game_created)
       .value("game_initiated", GameState::game_initiated)
@@ -135,6 +151,7 @@ BOOST_PYTHON_MODULE(_gameplayfootball) {
       .def("perform_action", &GameEnv_Python::action)
       .def("sticky_action_state", &GameEnv_Python::sticky_action_state)
       .def("step", &GameEnv_Python::step_python)
+      .def("step_with_info", &GameEnv_Python::step_with_info_python)
       .def("get_state", &GameEnv_Python::get_state_python)
       .def("set_state", &GameEnv_Python::set_state_python)
       .def("reset", &GameEnv_Python::reset_python)

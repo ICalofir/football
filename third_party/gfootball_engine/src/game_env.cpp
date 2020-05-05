@@ -42,6 +42,20 @@ void GameEnv::do_step(int count) {
   }
 }
 
+void GameEnv::do_step_with_info(int count, SharedInfoFrames& info_frames) {
+  DO_VALIDATION;
+  while (count--) {
+    DO_VALIDATION;
+    context->gameTask->ProcessPhase();
+
+    SharedInfo info = get_info();
+    info_frames.shared_info_frames.push_back(info);
+  }
+  if (context->gameTask->GetMatch()->IsInPlay()) {
+    DoValidation(__LINE__, __FILE__);
+  }
+}
+
 float Position::env_coord(int index) const {
   switch (index) {
     DO_VALIDATION;
@@ -342,6 +356,55 @@ void GameEnv::step() {
       controller->ResetNotSticky();
     }
   }
+}
+
+SharedInfoFrames GameEnv::step_with_info() {
+  SharedInfoFrames info_frames;
+
+  DO_VALIDATION;
+  // We do 10 environment steps per second, while game does 100 frames of
+  // physics animation.
+  int steps_to_do = GetGameConfig().physics_steps_per_frame;
+  if (GetScenarioConfig().real_time) {
+    DO_VALIDATION;
+    auto start = std::chrono::system_clock::now();
+    for (int x = 1; x <= steps_to_do; x++) {
+      DO_VALIDATION;
+      do_step_with_info(1, info_frames);
+      bool render_current_step =
+          x * last_step_rendered_frames_ / steps_to_do !=
+          (x - 1) * last_step_rendered_frames_ / steps_to_do;
+      if (render_current_step) {
+        render();
+      }
+    }
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now() - start);
+    if (elapsed.count() > 9 * (steps_to_do + 1) &&
+        last_step_rendered_frames_ > 1) {
+      DO_VALIDATION;
+      last_step_rendered_frames_--;
+    } else if (elapsed.count() < 9 * (steps_to_do - 1) &&
+               last_step_rendered_frames_ < steps_to_do) {
+      DO_VALIDATION;
+      last_step_rendered_frames_++;
+    }
+  } else {
+    do_step_with_info(steps_to_do, info_frames);
+    if (GetGameConfig().render) {
+      render();
+    }
+  }
+  if (context->gameTask->GetMatch()->IsInPlay()) {
+    DO_VALIDATION;
+    context->step++;
+    for (auto controller : GetControllers()) {
+      DO_VALIDATION;
+      controller->ResetNotSticky();
+    }
+  }
+
+  return info_frames;
 }
 
 void GameEnv::ProcessState(EnvState* state) {

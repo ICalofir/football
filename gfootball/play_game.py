@@ -41,6 +41,8 @@ flags.DEFINE_bool('real_time', False,
 flags.DEFINE_bool('render', True, 'Whether to do game rendering.')
 
 flags.DEFINE_integer('running_time', -1, 'How long to run play_game.py. If running_time=-1, the game runs until the user stops it.')
+flags.DEFINE_bool('save_info', False,
+                  'If true, save SharedInfo from the environment for every environment step. (be careful: agent step != environment step)')
 
 
 def main(_):
@@ -63,7 +65,7 @@ def main(_):
   start_time = time.time()
   try:
     while True:
-      _, _, done, _ = env.step([])
+      _, _, done, _ = env.step([], save_info=FLAGS.save_info)
       if done:
         env.reset()
 
