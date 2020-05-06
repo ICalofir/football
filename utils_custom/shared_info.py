@@ -1,6 +1,7 @@
 import datetime
 import json
 import os
+import time
 import numpy as np
 from absl import logging
 from PIL import Image
@@ -71,27 +72,24 @@ class SharedInfo():
         step = info.shared_info_frames[0].step
         self._frames.append(frame)
 
-        dudu_step = [info.shared_info_frames[i].step for i in range(10)]
-        print('Step: {}'.format(dudu_step))
-
         for i, shared_info in enumerate(info.shared_info_frames):
             observation = self._get_observation(shared_info)
             self._observations['step_{}'.format(self._real_steps)] = observation
 
             self._real_steps += 1
 
-        print(len(self._frames))
-
         if self._real_steps % 200 == 0:
             logging.info('Save info for frames at step: {}'.format(self._real_steps))
 
     def save_info_on_disk(self):
+        start_time = time.time()
         for i, frame in enumerate(self._frames):
             img = Image.fromarray(frame)
             img.save(os.path.join(self._frames_path, 'frame_{}.png'.format(i)))
 
             if i % 200 == 0:
                 logging.info('Frames: {}/{}'.format(i, len(self._frames)))
+        logging.info('Total elapsed time: {} s'.format(time.time() - start_time))
 
         json.dump(self._observations, open(self._observations_path, 'w'))
 
