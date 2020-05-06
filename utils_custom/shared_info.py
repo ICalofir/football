@@ -66,6 +66,7 @@ class SharedInfo():
         #            e_GameMode_Penalty
         observation['game_mode'] = shared_info.game_mode.name
         observation['step'] = shared_info.step
+        observation['pressed_action'] = shared_info.pressed_action
 
         return observation
 

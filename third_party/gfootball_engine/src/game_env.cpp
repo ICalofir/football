@@ -49,6 +49,21 @@ void GameEnv::do_step_with_info(int count, SharedInfoFrames& info_frames) {
     context->gameTask->ProcessPhase();
 
     SharedInfo info = get_info();
+
+    // THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
+    if (info.ball_owned_team == -1) {
+      info.pressed_action = "no_action";
+    } else {
+      bool left_team;
+      if (info.ball_owned_team == 0) { // left team
+        left_team = true;
+      } else { // right team
+        left_team = false;
+      }
+
+      info.pressed_action = get_pressed_action(left_team, 0);
+    }
+
     info_frames.shared_info_frames.push_back(info);
   }
   if (context->gameTask->GetMatch()->IsInPlay()) {
@@ -146,6 +161,26 @@ SharedInfo GameEnv::get_info() {
 screenshoot GameEnv::get_frame() {
   SetGame(this);
   return GetGraphicsSystem()->GetScreen();
+}
+
+// THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
+std::string GameEnv::get_pressed_action(bool left_team, int player) {
+  SetGame(this);
+  int controller_id = player + (left_team ? 0 : 11);
+  auto controller =
+      static_cast<AIControlledKeyboard*>(GetControllers()[controller_id]);
+
+  if (controller->GetButton(e_ButtonFunction_Shot)) {
+    return "shot";
+  } else if (controller->GetButton(e_ButtonFunction_ShortPass)) {
+    return "short_pass";
+  } else if (controller->GetButton(e_ButtonFunction_HighPass)) {
+    return "high_pass";
+  } else if (controller->GetButton(e_ButtonFunction_LongPass)) {
+    return "long_pass";
+  }
+
+  return "no_action";
 }
 
 bool GameEnv::sticky_action_state(int action, bool left_team, int player) {
