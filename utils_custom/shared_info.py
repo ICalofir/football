@@ -1,7 +1,6 @@
 import datetime
 import json
 import os
-import pickle
 import numpy as np
 from absl import logging
 from PIL import Image
@@ -88,11 +87,8 @@ class SharedInfo():
 
     def save_info_on_disk(self):
         for i, frame in enumerate(self._frames):
-            # img = Image.fromarray(frame)
-            # img.save(os.path.join(self._frames_path, 'frame_{}.png'.format(i)))
-
-            # pickle is faster than saving the images on disk
-            pickle.dump(frame, open(os.path.join(self._frames_path, 'frame_{}.pkl'.format(i)), 'wb'))
+            img = Image.fromarray(frame)
+            img.save(os.path.join(self._frames_path, 'frame_{}.png'.format(i)))
 
             if i % 200 == 0:
                 logging.info('Frames: {}/{}'.format(i, len(self._frames)))
