@@ -68,6 +68,31 @@ class SharedInfo():
         observation['step'] = shared_info.step
         observation['pressed_action'] = shared_info.pressed_action
 
+        # hardcoded values from
+        # GetCoordinates
+        # third_party/gfootball_engine/src/utils/gui2/windowmanager.cpp
+        start_x = 190
+        start_y = 0
+        effective_x = 900
+        effective_y = 720
+
+        # hardcoded values from third_party/gfootball_engine/src/defines.hpp
+        x_field_scale = 54.4
+        y_field_scale = -83.6
+
+        observation['projected_ball'] = {}
+        observation['projected_ball']['x'] = start_x + shared_info.ball_projected_position[0] * x_field_scale * effective_x * 0.01
+        observation['projected_ball']['y'] = start_y + shared_info.ball_projected_position[1] * y_field_scale * effective_y * 0.01
+
+        teams = ['left_team', 'right_team']
+        for team in teams:
+            observation[team] = {}
+            for i, player in enumerate(shared_info.left_team):
+                now_player = 'projected_player_{}'.format(i)
+                observation[team][now_player] = {}
+                observation[team][now_player]['x'] = start_x + player.projected_position[0] * x_field_scale * effective_x * 0.01
+                observation[team][now_player]['y'] = start_y + player.projected_position[1] * y_field_scale * effective_y * 0.01
+
         return observation
 
     def save_info(self, info, frame):

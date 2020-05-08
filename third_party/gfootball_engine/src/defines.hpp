@@ -241,6 +241,7 @@ struct PlayerInfo {
   PlayerInfo() { }
   PlayerInfo(const PlayerInfo& f) {
     player_position = f.player_position;
+    player_projected_position = f.player_projected_position;
     player_direction = f.player_direction;
     has_card = f.has_card;
     is_active = f.is_active;
@@ -249,6 +250,7 @@ struct PlayerInfo {
   }
   bool operator == (const PlayerInfo& f) const {
     return player_position == f.player_position &&
+        player_projected_position == f.player_projected_position &&
         player_direction == f.player_direction &&
         has_card == f.has_card &&
         is_active == f.is_active &&
@@ -256,6 +258,7 @@ struct PlayerInfo {
         role == f.role;
   }
   Position player_position;
+  Position player_projected_position;
   Position player_direction;
   bool has_card = false;
   bool is_active = true;
@@ -277,6 +280,7 @@ struct SharedInfo {
   SharedInfo() { }
   SharedInfo(const SharedInfo& f) {
     ball_position = f.ball_position;
+    ball_projected_position = f.ball_projected_position;
     ball_direction = f.ball_direction;
     ball_rotation = f.ball_rotation;
     left_team = f.left_team;
@@ -294,6 +298,7 @@ struct SharedInfo {
   }
   bool operator == (const SharedInfo& f) const {
     return ball_position == f.ball_position &&
+        ball_projected_position == f.ball_projected_position &&
         ball_direction == f.ball_direction &&
         ball_rotation == f.ball_rotation &&
         left_team == f.left_team &&
@@ -311,6 +316,7 @@ struct SharedInfo {
   }
 
   Position ball_position;
+  Position ball_projected_position;
   Position ball_direction;
   Position ball_rotation;
   std::vector<PlayerInfo> left_team;

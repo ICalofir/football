@@ -788,6 +788,7 @@ void Match::GetTeamState(SharedInfo *state,
       }
       PlayerInfo info;
       info.player_position = position.coords;
+      info.player_projected_position = GetProjectedCoord(position, GetCamera()).coords;
       info.player_direction =
           (movement / GetGameConfig().physics_steps_per_frame).coords;
       info.tired_factor = 1 - player->GetFatigueFactorInv();
@@ -808,6 +809,7 @@ void Match::GetTeamState(SharedInfo *state,
 void Match::GetState(SharedInfo *state) {
   DO_VALIDATION;
   state->ball_position = ball->GetAveragePosition(5).coords;
+  state->ball_projected_position = GetProjectedCoord(ball->GetAveragePosition(5), GetCamera()).coords;
   state->ball_rotation =
       (ball->GetRotation() / GetGameConfig().physics_steps_per_frame).coords;
   state->ball_direction =

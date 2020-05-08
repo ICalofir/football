@@ -107,6 +107,7 @@ BOOST_PYTHON_MODULE(_gameplayfootball) {
 
   class_<PlayerInfo>("PlayerInfo")
       .def_readonly("position", &PlayerInfo::player_position)
+      .def_readonly("projected_position", &PlayerInfo::player_projected_position)
       .def_readonly("direction", &PlayerInfo::player_direction)
       .def_readonly("tired_factor", &PlayerInfo::tired_factor)
       .def_readonly("has_card", &PlayerInfo::has_card)
@@ -121,6 +122,7 @@ BOOST_PYTHON_MODULE(_gameplayfootball) {
 
   class_<SharedInfo>("SharedInfo")
       .def_readonly("ball_position", &SharedInfo::ball_position)
+      .def_readonly("ball_projected_position", &SharedInfo::ball_projected_position)
       .def_readonly("ball_rotation", &SharedInfo::ball_rotation)
       .def_readonly("ball_direction", &SharedInfo::ball_direction)
       .def_readonly("left_team", &SharedInfo::left_team)
