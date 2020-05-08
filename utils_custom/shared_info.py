@@ -41,6 +41,11 @@ class SharedInfo():
         observation['ball']['y'] = shared_info.ball_position[1]
         observation['ball']['z'] = shared_info.ball_position[2]
 
+        observation['ball_direction'] = {}
+        observation['ball_direction']['x'] = shared_info.ball_direction[0]
+        observation['ball_direction']['y'] = shared_info.ball_direction[1]
+        observation['ball_direction']['z'] = shared_info.ball_direction[2]
+
         observation['ball_owned_team'] = shared_info.ball_owned_team # -1 = ball not owned, 0 = left team, 1 = right team
         observation['ball_owned_player'] = shared_info.ball_owned_player
 
