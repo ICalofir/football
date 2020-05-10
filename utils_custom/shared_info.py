@@ -6,6 +6,8 @@ import numpy as np
 from absl import logging
 from PIL import Image
 
+from utils_custom.constants_custom import *
+
 class SharedInfo():
     def __init__(self, dataset_path, dump_name):
         """
@@ -35,75 +37,60 @@ class SharedInfo():
     def _get_observation(self, shared_info):
         observation = {}
 
-        observation['frame_name'] = 'frame_{}'.format(len(self._frames) - 1)
-
         # ball
-        observation['ball_position'] = {}
-        observation['ball_position']['x'] = shared_info.ball_position[0]
-        observation['ball_position']['y'] = shared_info.ball_position[1]
-        observation['ball_position']['z'] = shared_info.ball_position[2]
+        observation['ball'] = {}
 
-        observation['ball_direction'] = {}
-        observation['ball_direction']['x'] = shared_info.ball_direction[0]
-        observation['ball_direction']['y'] = shared_info.ball_direction[1]
-        observation['ball_direction']['z'] = shared_info.ball_direction[2]
+        observation['ball']['position'] = {}
+        observation['ball']['position']['x'] = shared_info.ball_position[0]
+        observation['ball']['position']['y'] = shared_info.ball_position[1]
+        observation['ball']['position']['z'] = shared_info.ball_position[2]
 
-        observation['ball_owned_team'] = shared_info.ball_owned_team # -1 = ball not owned, 0 = left team, 1 = right team
-        observation['ball_owned_player'] = shared_info.ball_owned_player
+        observation['ball']['position_projected'] = {}
+        observation['ball']['position_projected']['x'] = START_X + shared_info.ball_projected_position[0] * X_FIELD_SCALE * EFFECTIVE_X * 0.01
+        observation['ball']['position_projected']['y'] = START_Y + shared_info.ball_projected_position[1] * Y_FIELD_SCALE * EFFECTIVE_Y * 0.01
+
+        observation['ball']['direction'] = {}
+        observation['ball']['direction']['x'] = shared_info.ball_direction[0]
+        observation['ball']['direction']['y'] = shared_info.ball_direction[1]
+        observation['ball']['direction']['z'] = shared_info.ball_direction[2]
+
+        observation['ball']['owned_team'] = shared_info.ball_owned_team # -1 = ball not owned, 0 = left team, 1 = right team
+        observation['ball']['owned_player'] = shared_info.ball_owned_player
 
         # team
         teams = ['left_team', 'right_team']
         for team in teams:
             observation[team] = {}
-            for i, player in enumerate(shared_info.left_team):
-                now_player = 'player_position_{}'.format(i)
+
+            shared_info_team = shared_info.left_team
+            shared_info_team_controller = shared_info.left_controllers[0] # THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
+            shared_info_team_pressed_action = shared_info.left_team_pressed_action # THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
+            if team == 'right_team':
+                shared_info_team = shared_info.right_team
+                shared_info_team_controller = shared_info.right_controllers[0] # THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
+                shared_info_team_pressed_action = shared_info.right_team_pressed_action # THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
+
+            observation[team]['controlled_player'] = shared_info_team_controller.controlled_player
+            observation[team]['pressed_action'] = shared_info_team_pressed_action
+
+            for i, player in enumerate(shared_info_team):
+                now_player = 'player_{}'.format(i)
                 observation[team][now_player] = {}
-                observation[team][now_player]['x'] = player.position[0]
-                observation[team][now_player]['y'] = player.position[1]
-                observation[team][now_player]['z'] = player.position[2]
+
+                observation[team][now_player]['position'] = {}
+                observation[team][now_player]['position']['x'] = player.position[0]
+                observation[team][now_player]['position']['y'] = player.position[1]
+                observation[team][now_player]['position']['z'] = player.position[2]
+
+                observation[team][now_player]['position_projected'] = {}
+                observation[team][now_player]['position_projected']['x'] = START_X + player.projected_position[0] * X_FIELD_SCALE * EFFECTIVE_X * 0.01
+                observation[team][now_player]['position_projected']['y'] = START_Y + player.projected_position[1] * Y_FIELD_SCALE * EFFECTIVE_Y * 0.01
 
         # general
+        observation['frame_name'] = 'frame_{}'.format(len(self._frames) - 1)
+        observation['game_mode'] = shared_info.game_mode.name
         observation['is_in_play'] = shared_info.is_in_play
         observation['score'] = (shared_info.left_goals, shared_info.right_goals)
-        # game_mode: e_GameMode_Normal,
-        #            e_GameMode_KickOff,
-        #            e_GameMode_GoalKick,
-        #            e_GameMode_FreeKick,
-        #            e_GameMode_Corner,
-        #            e_GameMode_ThrowIn,
-        #            e_GameMode_Penalty
-        observation['game_mode'] = shared_info.game_mode.name
-
-        # hardcoded values from
-        # GetCoordinates
-        # third_party/gfootball_engine/src/utils/gui2/windowmanager.cpp
-        start_x = 190
-        start_y = 0
-        effective_x = 900
-        effective_y = 720
-
-        # hardcoded values from third_party/gfootball_engine/src/defines.hpp
-        x_field_scale = 54.4
-        y_field_scale = -83.6
-
-        observation['ball_position_projected'] = {}
-        observation['ball_position_projected']['x'] = start_x + shared_info.ball_projected_position[0] * x_field_scale * effective_x * 0.01
-        observation['ball_position_projected']['y'] = start_y + shared_info.ball_projected_position[1] * y_field_scale * effective_y * 0.01
-
-        teams = ['left_team', 'right_team']
-        for team in teams:
-            observation[team] = {}
-            for i, player in enumerate(shared_info.left_team):
-                now_player = 'player_position_projected{}'.format(i)
-                observation[team][now_player] = {}
-                observation[team][now_player]['x'] = start_x + player.projected_position[0] * x_field_scale * effective_x * 0.01
-                observation[team][now_player]['y'] = start_y + player.projected_position[1] * y_field_scale * effective_y * 0.01
-
-        # THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
-        observation['left_team_controlled_player'] = shared_info.left_controllers[0].controlled_player
-        observation['right_team_controlled_player'] = shared_info.right_controllers[0].controlled_player
-        observation['left_team_pressed_action'] = shared_info.left_team_pressed_action
-        observation['right_team_pressed__action'] = shared_info.right_team_pressed_action
 
         return observation
 
