@@ -136,7 +136,8 @@ BOOST_PYTHON_MODULE(_gameplayfootball) {
       .add_property("right_controllers", &SharedInfo::right_controllers)
       .def_readonly("game_mode", &SharedInfo::game_mode)
       .def_readonly("step", &SharedInfo::step)
-      .def_readonly("pressed_action", &SharedInfo::pressed_action);
+      .def_readonly("left_team_pressed_action", &SharedInfo::left_team_pressed_action)
+      .def_readonly("right_team_pressed_action", &SharedInfo::right_team_pressed_action);
 
   class_<SharedInfoFrames>("SharedInfoFrames")
       .def_readonly("shared_info_frames", &SharedInfoFrames::shared_info_frames);

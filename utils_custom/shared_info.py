@@ -35,11 +35,13 @@ class SharedInfo():
     def _get_observation(self, shared_info):
         observation = {}
 
+        observation['frame_name'] = 'frame_{}'.format(len(self._frames) - 1)
+
         # ball
-        observation['ball'] = {}
-        observation['ball']['x'] = shared_info.ball_position[0]
-        observation['ball']['y'] = shared_info.ball_position[1]
-        observation['ball']['z'] = shared_info.ball_position[2]
+        observation['ball_position'] = {}
+        observation['ball_position']['x'] = shared_info.ball_position[0]
+        observation['ball_position']['y'] = shared_info.ball_position[1]
+        observation['ball_position']['z'] = shared_info.ball_position[2]
 
         observation['ball_direction'] = {}
         observation['ball_direction']['x'] = shared_info.ball_direction[0]
@@ -54,7 +56,7 @@ class SharedInfo():
         for team in teams:
             observation[team] = {}
             for i, player in enumerate(shared_info.left_team):
-                now_player = 'player_{}'.format(i)
+                now_player = 'player_position_{}'.format(i)
                 observation[team][now_player] = {}
                 observation[team][now_player]['x'] = player.position[0]
                 observation[team][now_player]['y'] = player.position[1]
@@ -62,6 +64,7 @@ class SharedInfo():
 
         # general
         observation['is_in_play'] = shared_info.is_in_play
+        observation['score'] = (shared_info.left_goals, shared_info.right_goals)
         # game_mode: e_GameMode_Normal,
         #            e_GameMode_KickOff,
         #            e_GameMode_GoalKick,
@@ -70,8 +73,6 @@ class SharedInfo():
         #            e_GameMode_ThrowIn,
         #            e_GameMode_Penalty
         observation['game_mode'] = shared_info.game_mode.name
-        observation['step'] = shared_info.step
-        observation['pressed_action'] = shared_info.pressed_action
 
         # hardcoded values from
         # GetCoordinates
@@ -85,23 +86,28 @@ class SharedInfo():
         x_field_scale = 54.4
         y_field_scale = -83.6
 
-        observation['projected_ball'] = {}
-        observation['projected_ball']['x'] = start_x + shared_info.ball_projected_position[0] * x_field_scale * effective_x * 0.01
-        observation['projected_ball']['y'] = start_y + shared_info.ball_projected_position[1] * y_field_scale * effective_y * 0.01
+        observation['ball_position_projected'] = {}
+        observation['ball_position_projected']['x'] = start_x + shared_info.ball_projected_position[0] * x_field_scale * effective_x * 0.01
+        observation['ball_position_projected']['y'] = start_y + shared_info.ball_projected_position[1] * y_field_scale * effective_y * 0.01
 
         teams = ['left_team', 'right_team']
         for team in teams:
             observation[team] = {}
             for i, player in enumerate(shared_info.left_team):
-                now_player = 'projected_player_{}'.format(i)
+                now_player = 'player_position_projected{}'.format(i)
                 observation[team][now_player] = {}
                 observation[team][now_player]['x'] = start_x + player.projected_position[0] * x_field_scale * effective_x * 0.01
                 observation[team][now_player]['y'] = start_y + player.projected_position[1] * y_field_scale * effective_y * 0.01
 
+        # THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
+        observation['left_team_controlled_player'] = shared_info.left_controllers[0].controlled_player
+        observation['right_team_controlled_player'] = shared_info.right_controllers[0].controlled_player
+        observation['left_team_pressed_action'] = shared_info.left_team_pressed_action
+        observation['right_team_pressed__action'] = shared_info.right_team_pressed_action
+
         return observation
 
     def save_info(self, info, frame):
-        step = info.shared_info_frames[0].step
         self._frames.append(frame)
 
         for i, shared_info in enumerate(info.shared_info_frames):

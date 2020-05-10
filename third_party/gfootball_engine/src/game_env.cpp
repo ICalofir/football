@@ -49,21 +49,6 @@ void GameEnv::do_step_with_info(int count, SharedInfoFrames& info_frames) {
     context->gameTask->ProcessPhase();
 
     SharedInfo info = get_info();
-
-    // THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
-    if (info.ball_owned_team == -1) {
-      info.pressed_action = "no_action";
-    } else {
-      bool left_team;
-      if (info.ball_owned_team == 0) { // left team
-        left_team = true;
-      } else { // right team
-        left_team = false;
-      }
-
-      info.pressed_action = get_pressed_action(left_team, 0);
-    }
-
     info_frames.shared_info_frames.push_back(info);
   }
   if (context->gameTask->GetMatch()->IsInPlay()) {
@@ -153,6 +138,11 @@ SharedInfo GameEnv::get_info() {
   GetTracker()->setDisabled(true);
   SharedInfo info;
   GetGameTask()->GetMatch()->GetState(&info);
+
+  // THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
+  info.left_team_pressed_action = get_pressed_action(true, 0);
+  info.right_team_pressed_action = get_pressed_action(false, 0);
+
   info.step = context->step;
   GetTracker()->setDisabled(false);
   return info;
@@ -395,6 +385,8 @@ void GameEnv::step() {
 
 SharedInfoFrames GameEnv::step_with_info() {
   SharedInfoFrames info_frames;
+  SharedInfo info = get_info(); // info after the agent performs an action
+  info_frames.shared_info_frames.push_back(info);
 
   DO_VALIDATION;
   // We do 10 environment steps per second, while game does 100 frames of
