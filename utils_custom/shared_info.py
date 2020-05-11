@@ -41,18 +41,18 @@ class SharedInfo():
         observation['ball'] = {}
 
         observation['ball']['position'] = {}
-        observation['ball']['position']['x'] = shared_info.ball_position[0]
-        observation['ball']['position']['y'] = shared_info.ball_position[1]
-        observation['ball']['position']['z'] = shared_info.ball_position[2]
+        observation['ball']['position']['x'] = shared_info.ball_position[0] * X_FIELD_SCALE
+        observation['ball']['position']['y'] = shared_info.ball_position[1] * Y_FIELD_SCALE
+        observation['ball']['position']['z'] = shared_info.ball_position[2] * Z_FIELD_SCALE
 
         observation['ball']['position_projected'] = {}
         observation['ball']['position_projected']['x'] = START_X + shared_info.ball_projected_position[0] * X_FIELD_SCALE * EFFECTIVE_X * 0.01
         observation['ball']['position_projected']['y'] = START_Y + shared_info.ball_projected_position[1] * Y_FIELD_SCALE * EFFECTIVE_Y * 0.01
 
         observation['ball']['direction'] = {}
-        observation['ball']['direction']['x'] = shared_info.ball_direction[0]
-        observation['ball']['direction']['y'] = shared_info.ball_direction[1]
-        observation['ball']['direction']['z'] = shared_info.ball_direction[2]
+        observation['ball']['direction']['x'] = shared_info.ball_direction[0] * X_FIELD_SCALE
+        observation['ball']['direction']['y'] = shared_info.ball_direction[1] * Y_FIELD_SCALE
+        observation['ball']['direction']['z'] = shared_info.ball_direction[2] * Z_FIELD_SCALE
 
         observation['ball']['owned_team'] = shared_info.ball_owned_team # -1 = ball not owned, 0 = left team, 1 = right team
         observation['ball']['owned_player'] = shared_info.ball_owned_player
@@ -78,9 +78,9 @@ class SharedInfo():
                 observation[team][now_player] = {}
 
                 observation[team][now_player]['position'] = {}
-                observation[team][now_player]['position']['x'] = player.position[0]
-                observation[team][now_player]['position']['y'] = player.position[1]
-                observation[team][now_player]['position']['z'] = player.position[2]
+                observation[team][now_player]['position']['x'] = player.position[0] * X_FIELD_SCALE
+                observation[team][now_player]['position']['y'] = player.position[1] * Y_FIELD_SCALE
+                observation[team][now_player]['position']['z'] = player.position[2] * Z_FIELD_SCALE
 
                 observation[team][now_player]['position_projected'] = {}
                 observation[team][now_player]['position_projected']['x'] = START_X + player.projected_position[0] * X_FIELD_SCALE * EFFECTIVE_X * 0.01
@@ -92,12 +92,17 @@ class SharedInfo():
         observation['is_in_play'] = shared_info.is_in_play
         observation['score'] = (shared_info.left_goals, shared_info.right_goals)
 
+        observation['last_touch_team_id'] = shared_info.last_touch_team_id
+        observation['last_touch_player_id'] = shared_info.last_touch_player_id
+
         return observation
 
     def save_info(self, info, frame):
         self._frames.append(frame)
 
-        for i, shared_info in enumerate(info.shared_info_frames):
+        self._observations['agent_action_frame_{}'.format(len(self._frames) - 1)] = self._get_observation(info.shared_info_frames[0])
+
+        for shared_info in info.shared_info_frames[1:]:
             observation = self._get_observation(shared_info)
             self._observations['step_{}'.format(self._real_steps)] = observation
 

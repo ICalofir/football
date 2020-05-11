@@ -801,6 +801,11 @@ void Match::GetTeamState(SharedInfo *state,
         state->ball_owned_player = team.size();
         state->ball_owned_team = GetLastTouchTeamID();
       }
+
+      if (GetLastTouchTeam()->GetLastTouchPlayer() == player) {
+        state->last_touch_player_id = team.size();
+      }
+
       team.push_back(info);
     }
   }
@@ -824,6 +829,8 @@ void Match::GetState(SharedInfo *state) {
   state->left_controllers.resize(GetScenarioConfig().left_team.size());
   state->right_controllers.clear();
   state->right_controllers.resize(GetScenarioConfig().right_team.size());
+
+  state->last_touch_team_id = GetLastTouchTeamID();
 
   std::map<IHIDevice*, int> controller_mapping;
   {

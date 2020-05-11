@@ -296,6 +296,8 @@ struct SharedInfo {
     step = f.step;
     left_team_pressed_action = f.left_team_pressed_action;
     right_team_pressed_action = f.right_team_pressed_action;
+    last_touch_team_id = f.last_touch_team_id;
+    last_touch_player_id = f.last_touch_player_id;
   }
   bool operator == (const SharedInfo& f) const {
     return ball_position == f.ball_position &&
@@ -314,7 +316,9 @@ struct SharedInfo {
         ball_owned_player == f.ball_owned_player &&
         step == f.step &&
         left_team_pressed_action == f.left_team_pressed_action &&
-        right_team_pressed_action == f.right_team_pressed_action;
+        right_team_pressed_action == f.right_team_pressed_action &&
+        last_touch_team_id == f.last_touch_team_id &&
+        last_touch_player_id == f.last_touch_player_id;
   }
 
   Position ball_position;
@@ -333,6 +337,8 @@ struct SharedInfo {
   int step = 0;
   std::string left_team_pressed_action = "";
   std::string right_team_pressed_action = "";
+  int last_touch_team_id = -1;
+  int last_touch_player_id = -1;
 };
 
 struct SharedInfoFrames {

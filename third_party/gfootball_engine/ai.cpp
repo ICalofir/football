@@ -137,7 +137,9 @@ BOOST_PYTHON_MODULE(_gameplayfootball) {
       .def_readonly("game_mode", &SharedInfo::game_mode)
       .def_readonly("step", &SharedInfo::step)
       .def_readonly("left_team_pressed_action", &SharedInfo::left_team_pressed_action)
-      .def_readonly("right_team_pressed_action", &SharedInfo::right_team_pressed_action);
+      .def_readonly("right_team_pressed_action", &SharedInfo::right_team_pressed_action)
+      .def_readonly("last_touch_team_id", &SharedInfo::last_touch_team_id)
+      .def_readonly("last_touch_player_id", &SharedInfo::last_touch_player_id);
 
   class_<SharedInfoFrames>("SharedInfoFrames")
       .def_readonly("shared_info_frames", &SharedInfoFrames::shared_info_frames);

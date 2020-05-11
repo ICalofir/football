@@ -7,6 +7,7 @@ EFFECTIVE_Y = 720
 # Hardcoded values from https://github.com/ICalofir/football/blob/master_fork/third_party/gfootball_engine/src/defines.hpp
 X_FIELD_SCALE = 54.4
 Y_FIELD_SCALE = -83.6
+Z_FIELD_SCALE = 1.
 
 # game_mode: e_GameMode_Normal,
 #            e_GameMode_KickOff,
