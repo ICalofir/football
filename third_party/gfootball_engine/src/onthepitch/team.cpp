@@ -263,6 +263,7 @@ void Team::SetFadingTeamPossessionAmount(float value) {
 void Team::SetLastTouchPlayer(Player *player, e_TouchType touchType) {
   DO_VALIDATION;
   lastTouchPlayer = player;
+  playerTouchBall = player;
   player->SetLastTouchTime_ms(match->GetActualTime_ms());
   player->SetLastTouchType(touchType);
   match->SetLastTouchTeamID(GetID(), touchType);

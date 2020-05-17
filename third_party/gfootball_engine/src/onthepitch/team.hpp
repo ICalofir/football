@@ -93,7 +93,9 @@ class Team {
 
     void SetLastTouchPlayer(
         Player *player, e_TouchType touchType = e_TouchType_Intentional_Kicked);
+    void SetPlayerTouchBall(Player *player) { playerTouchBall = player; }
     Player *GetLastTouchPlayer() const { return lastTouchPlayer; }
+    Player *GetPlayerTouchBall() const { return playerTouchBall; }
     float GetLastTouchBias(int decay_ms, unsigned long time_ms = 0) { DO_VALIDATION;
       return lastTouchPlayer
                  ? lastTouchPlayer->GetLastTouchBias(decay_ms, time_ms)
@@ -150,6 +152,8 @@ class Team {
     // begin() == due next
     std::list<int> switchPriority;
     Player *lastTouchPlayer = 0;
+
+    Player *playerTouchBall = 0;
 
     boost::intrusive_ptr < Resource<Surface> > kit;
     int side = -1;

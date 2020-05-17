@@ -806,6 +806,11 @@ void Match::GetTeamState(SharedInfo *state,
         state->last_touch_player_id = team.size();
       }
 
+      if (GetLastTouchTeam()->GetPlayerTouchBall() == player) {
+        state->player_touch_ball = team.size();
+        state->team_touch_ball = team_id;
+      }
+
       team.push_back(info);
     }
   }
@@ -842,8 +847,15 @@ void Match::GetState(SharedInfo *state) {
       controller_mapping[controllers[x + MAX_PLAYERS]] = x;
     }
   }
+
+  state->player_touch_ball = -1;
+  state->team_touch_ball = -1;
   GetTeamState(state, controller_mapping, first_team);
   GetTeamState(state, controller_mapping, second_team);
+
+  if (GetLastTouchTeamID() != -1) {
+    GetLastTouchTeam()->SetPlayerTouchBall(0);
+  }
 }
 
 // THE SPICE
