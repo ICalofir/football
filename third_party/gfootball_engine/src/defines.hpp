@@ -300,6 +300,7 @@ struct SharedInfo {
     last_touch_player_id = f.last_touch_player_id;
     player_touch_ball = f.player_touch_ball;
     team_touch_ball = f.team_touch_ball;
+    is_goal_scored = f.is_goal_scored;
   }
   bool operator == (const SharedInfo& f) const {
     return ball_position == f.ball_position &&
@@ -322,7 +323,8 @@ struct SharedInfo {
         last_touch_team_id == f.last_touch_team_id &&
         last_touch_player_id == f.last_touch_player_id &&
         player_touch_ball == f.player_touch_ball &&
-        team_touch_ball == f.team_touch_ball;
+        team_touch_ball == f.team_touch_ball &&
+        is_goal_scored == f.is_goal_scored;
   }
 
   Position ball_position;
@@ -345,6 +347,7 @@ struct SharedInfo {
   int last_touch_player_id = -1;
   int player_touch_ball = -1;
   int team_touch_ball = -1;
+  bool is_goal_scored = false;
 };
 
 struct SharedInfoFrames {

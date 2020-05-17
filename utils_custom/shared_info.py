@@ -98,6 +98,8 @@ class SharedInfo():
         observation['player_touch_ball'] = shared_info.player_touch_ball
         observation['team_touch_ball'] = shared_info.team_touch_ball
 
+        observation['is_goal_scored'] = shared_info.is_goal_scored
+
         return observation
 
     def save_info(self, info, frame):

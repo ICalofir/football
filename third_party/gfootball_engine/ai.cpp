@@ -141,7 +141,8 @@ BOOST_PYTHON_MODULE(_gameplayfootball) {
       .def_readonly("last_touch_team_id", &SharedInfo::last_touch_team_id)
       .def_readonly("last_touch_player_id", &SharedInfo::last_touch_player_id)
       .def_readonly("player_touch_ball", &SharedInfo::player_touch_ball)
-      .def_readonly("team_touch_ball", &SharedInfo::team_touch_ball);
+      .def_readonly("team_touch_ball", &SharedInfo::team_touch_ball)
+      .def_readonly("is_goal_scored", &SharedInfo::is_goal_scored);
 
   class_<SharedInfoFrames>("SharedInfoFrames")
       .def_readonly("shared_info_frames", &SharedInfoFrames::shared_info_frames);

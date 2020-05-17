@@ -835,6 +835,7 @@ void Match::GetState(SharedInfo *state) {
   state->right_controllers.clear();
   state->right_controllers.resize(GetScenarioConfig().right_team.size());
 
+  state->is_goal_scored = IsGoalScored();
   state->last_touch_team_id = GetLastTouchTeamID();
 
   std::map<IHIDevice*, int> controller_mapping;
