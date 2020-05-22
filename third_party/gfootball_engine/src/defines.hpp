@@ -296,6 +296,8 @@ struct SharedInfo {
     step = f.step;
     left_team_pressed_action = f.left_team_pressed_action;
     right_team_pressed_action = f.right_team_pressed_action;
+    left_team_controlled_player = f.left_team_controlled_player;
+    right_team_controlled_player = f.right_team_controlled_player;
     last_touch_team_id = f.last_touch_team_id;
     last_touch_player_id = f.last_touch_player_id;
     player_touch_ball = f.player_touch_ball;
@@ -320,6 +322,8 @@ struct SharedInfo {
         step == f.step &&
         left_team_pressed_action == f.left_team_pressed_action &&
         right_team_pressed_action == f.right_team_pressed_action &&
+        left_team_controlled_player == f.left_team_controlled_player &&
+        right_team_controlled_player == f.right_team_controlled_player &&
         last_touch_team_id == f.last_touch_team_id &&
         last_touch_player_id == f.last_touch_player_id &&
         player_touch_ball == f.player_touch_ball &&
@@ -341,8 +345,10 @@ struct SharedInfo {
   int ball_owned_team = 0;
   int ball_owned_player = 0;
   int step = 0;
-  int left_team_pressed_action = 0;
-  int right_team_pressed_action = 0;
+  int left_team_pressed_action = -1;
+  int right_team_pressed_action = -1;
+  int left_team_controlled_player = -1;
+  int right_team_controlled_player = -1;
   int last_touch_team_id = -1;
   int last_touch_player_id = -1;
   int player_touch_ball = -1;

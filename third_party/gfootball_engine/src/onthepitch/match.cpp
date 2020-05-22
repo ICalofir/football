@@ -814,8 +814,10 @@ void Match::GetTeamState(SharedInfo *state,
       if (player == GetTeam(team_id)->GetDesignatedTeamPossessionPlayer()) {
         if (team_id == 0) {
           state->left_team_pressed_action = player->GetCurrentFunctionType();
+          state->left_team_controlled_player = team.size();
         } else {
           state->right_team_pressed_action = player->GetCurrentFunctionType();
+          state->right_team_controlled_player = team.size();
         }
       }
 
