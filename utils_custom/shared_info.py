@@ -63,12 +63,12 @@ class SharedInfo():
             observation[team] = {}
 
             shared_info_team = shared_info.left_team
-            shared_info_team_controller = shared_info.left_controllers[0] # THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
-            shared_info_team_pressed_action = shared_info.left_team_pressed_action # THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
+            shared_info_team_controller = shared_info.left_controllers[0]
+            shared_info_team_pressed_action = shared_info.left_team_pressed_action
             if team == 'right_team':
                 shared_info_team = shared_info.right_team
-                shared_info_team_controller = shared_info.right_controllers[0] # THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
-                shared_info_team_pressed_action = shared_info.right_team_pressed_action # THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
+                shared_info_team_controller = shared_info.right_controllers[0]
+                shared_info_team_pressed_action = shared_info.right_team_pressed_action
 
             observation[team]['controlled_player'] = shared_info_team_controller.controlled_player
             observation[team]['pressed_action'] = shared_info_team_pressed_action
@@ -105,9 +105,7 @@ class SharedInfo():
     def save_info(self, info, frame):
         self._frames.append(frame)
 
-        self._observations['agent_action_frame_{}'.format(len(self._frames) - 1)] = self._get_observation(info.shared_info_frames[0])
-
-        for shared_info in info.shared_info_frames[1:]:
+        for shared_info in info.shared_info_frames:
             observation = self._get_observation(shared_info)
             self._observations['step_{}'.format(self._real_steps)] = observation
 

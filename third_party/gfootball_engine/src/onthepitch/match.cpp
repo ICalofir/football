@@ -811,6 +811,14 @@ void Match::GetTeamState(SharedInfo *state,
         state->team_touch_ball = team_id;
       }
 
+      if (player == GetTeam(team_id)->GetDesignatedTeamPossessionPlayer()) {
+        if (team_id == 0) {
+          state->left_team_pressed_action = player->GetCurrentFunctionType();
+        } else {
+          state->right_team_pressed_action = player->GetCurrentFunctionType();
+        }
+      }
+
       team.push_back(info);
     }
   }

@@ -341,8 +341,8 @@ struct SharedInfo {
   int ball_owned_team = 0;
   int ball_owned_player = 0;
   int step = 0;
-  std::string left_team_pressed_action = "";
-  std::string right_team_pressed_action = "";
+  int left_team_pressed_action = 0;
+  int right_team_pressed_action = 0;
   int last_touch_team_id = -1;
   int last_touch_player_id = -1;
   int player_touch_ball = -1;

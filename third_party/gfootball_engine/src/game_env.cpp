@@ -139,10 +139,6 @@ SharedInfo GameEnv::get_info() {
   SharedInfo info;
   GetGameTask()->GetMatch()->GetState(&info);
 
-  // THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
-  info.left_team_pressed_action = get_pressed_action(true, 0);
-  info.right_team_pressed_action = get_pressed_action(false, 0);
-
   info.step = context->step;
   GetTracker()->setDisabled(false);
   return info;
@@ -151,26 +147,6 @@ SharedInfo GameEnv::get_info() {
 screenshoot GameEnv::get_frame() {
   SetGame(this);
   return GetGraphicsSystem()->GetScreen();
-}
-
-// THIS WORKS ONLY FOR 2 AGENTS (1 FOR EACH TEAM)
-std::string GameEnv::get_pressed_action(bool left_team, int player) {
-  SetGame(this);
-  int controller_id = player + (left_team ? 0 : 11);
-  auto controller =
-      static_cast<AIControlledKeyboard*>(GetControllers()[controller_id]);
-
-  if (controller->GetButton(e_ButtonFunction_Shot)) {
-    return "shot";
-  } else if (controller->GetButton(e_ButtonFunction_ShortPass)) {
-    return "short_pass";
-  } else if (controller->GetButton(e_ButtonFunction_HighPass)) {
-    return "high_pass";
-  } else if (controller->GetButton(e_ButtonFunction_LongPass)) {
-    return "long_pass";
-  }
-
-  return "no_action";
 }
 
 bool GameEnv::sticky_action_state(int action, bool left_team, int player) {
@@ -385,8 +361,6 @@ void GameEnv::step() {
 
 SharedInfoFrames GameEnv::step_with_info() {
   SharedInfoFrames info_frames;
-  SharedInfo info = get_info(); // info after the agent performs an action
-  info_frames.shared_info_frames.push_back(info);
 
   DO_VALIDATION;
   // We do 10 environment steps per second, while game does 100 frames of

@@ -53,7 +53,6 @@ struct GameEnv {
   screenshoot get_frame();
 
   // Executes the action inside the game.
-  std::string get_pressed_action(bool left_team, int player);
   bool sticky_action_state(int action, bool left_team, int player);
   void action(int action, bool left_team, int player);
   void reset(ScenarioConfig& game_config, bool init_animation);
