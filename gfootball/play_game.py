@@ -33,12 +33,12 @@ from utils_custom.shared_info import get_shared_info_object
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string('players', 'keyboard:left_players=1',
+flags.DEFINE_string('players', '',
                     'Semicolon separated list of players, single keyboard '
                     'player on the left by default')
-flags.DEFINE_string('level', '', 'Level to play')
-flags.DEFINE_enum('action_set', 'default', ['default', 'full'], 'Action set')
-flags.DEFINE_bool('real_time', False,
+flags.DEFINE_string('level', '11_vs_11_competition', 'Level to play')
+flags.DEFINE_enum('action_set', 'full', ['default', 'full'], 'Action set')
+flags.DEFINE_bool('real_time', True,
                   'If true, environment will slow down so humans can play.')
 flags.DEFINE_bool('render', True, 'Whether to do game rendering.')
 
@@ -55,7 +55,7 @@ def main(_):
              ), ('Player type \'agent\' can not be used with play_game.')
   cfg = config.Config({
       'action_set': FLAGS.action_set,
-      'dump_full_episodes': True,
+      'dump_full_episodes': False,
       'players': players,
       'real_time': FLAGS.real_time,
   })

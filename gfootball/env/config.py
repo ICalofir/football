@@ -80,19 +80,19 @@ class Config(object):
   def __init__(self, values=None):
     self._game_config = libgame.GameConfig()
     self._values = {
-        'action_set': 'default',
+        'action_set': 'full',
         'custom_display_stats': None,
-        'display_game_stats': True,
+        'display_game_stats': False,
         'dump_full_episodes': False,
         'dump_scores': False,
-        'players': ['agent:left_players=1'],
-        'level': '11_vs_11_stochastic',
+        'players': [],
+        'level': '11_vs_11_competition',
         'physics_steps_per_frame': 10,
         'real_time': False,
         'tracesdir': '/tmp/dumps',
         'video_format': 'avi',
         'video_quality_level': 1,  # 0 - low, 1 - medium, 2 - high
-        'write_video': True
+        'write_video': False
     }
     if values:
       self._values.update(values)
