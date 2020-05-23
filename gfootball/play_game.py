@@ -45,7 +45,7 @@ flags.DEFINE_bool('render', True, 'Whether to do game rendering.')
 flags.DEFINE_integer('running_time', -1, 'How long to run play_game.py. If running_time=-1, the game runs until the user stops it.')
 flags.DEFINE_bool('save_info', False,
                   'If true, save SharedInfo from the environment for every environment step. (be careful: agent step != environment step)')
-flags.DEFINE_string('dataset_path', '/home/ionutc/Documents/Repositories/Dissertation-2020/datasets/raw_dataset',
+flags.DEFINE_string('dataset_path', '/mnt/storage1/football_dataset/raw_dataset',
                     'The path where the frames and their observations will be saved.')
 
 

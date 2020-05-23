@@ -18,7 +18,7 @@ Z_FIELD_SCALE = 1.
     # e_GameMode_ThrowIn,
     # e_GameMode_Penalty
 
-# pressed_action: 
+# pressed_action:
     # e_FunctionType_None,
     # e_FunctionType_Movement,
     # e_FunctionType_BallControl,
