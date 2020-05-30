@@ -314,7 +314,7 @@ void Referee::BallTouched() {
           buffer.restartPos = ballOwner->GetPitchPosition();
           buffer.teamID = 1 - lastTouchTeamID;
           buffer.active = true;
-          match->SpamMessage("offside!");
+          /* match->SpamMessage("offside!"); */
         }
       }
     }
@@ -521,7 +521,7 @@ bool Referee::CheckFoul() {
       spamMessage.append(" red card!!!");
       foul.foulPlayer->GiveRedCard(match->GetActualTime_ms() + 6000); // need to find out proper moment
     }
-    match->SpamMessage(spamMessage);
+    /* match->SpamMessage(spamMessage); */
 
     foul.hasBeenProcessed = true;
 

@@ -245,11 +245,13 @@ Match::Match(MatchData *matchData, const std::vector<IHIDevice *> &controllers, 
 
   radar = new Gui2Radar(menuTask->GetWindowManager(), "game_radar", 38, 78, 24, 18, this, matchData->GetTeamData(0).GetColor1(), matchData->GetTeamData(0).GetColor2(), matchData->GetTeamData(1).GetColor1(), matchData->GetTeamData(1).GetColor2());
   root->AddView(radar);
-  radar->Show();
+  /* radar->Show(); */
+  radar->Hide();
 
   scoreboard = new Gui2ScoreBoard(menuTask->GetWindowManager(), this);
   root->AddView(scoreboard);
-  scoreboard->Show();
+  /* scoreboard->Show(); */
+  scoreboard->Hide();
 
   messageCaption = new Gui2Caption(menuTask->GetWindowManager(), "game_messages", 0, 0, 80, 8, "");
   messageCaption->SetTransparency(0.3f);
@@ -987,22 +989,22 @@ bool Match::Process() {
       if (!ownGoal) {
         DO_VALIDATION;
         lastGoalScorer = GetLastGoalTeam()->GetLastTouchPlayer();
-        if (lastGoalScorer) {
-          DO_VALIDATION;
-          SpamMessage("GOAL for " + GetLastGoalTeam()->GetTeamData()->GetName() + "! " + lastGoalScorer->GetPlayerData()->GetLastName() + " scores!", 4000);
-        } else {
-          SpamMessage("GOAL!!!", 4000);
-        }
+        /* if (lastGoalScorer) { */
+        /*   DO_VALIDATION; */
+        /*   SpamMessage("GOAL for " + GetLastGoalTeam()->GetTeamData()->GetName() + "! " + lastGoalScorer->GetPlayerData()->GetLastName() + " scores!", 4000); */
+        /* } else { */
+        /*   SpamMessage("GOAL!!!", 4000); */
+        /* } */
       }
 
       else {  // own goal
         lastGoalScorer = teams[abs(GetLastGoalTeam()->GetID() - 1)]->GetLastTouchPlayer();
-        if (lastGoalScorer) {
-          DO_VALIDATION;
-          SpamMessage("OWN GOAL! " + lastGoalScorer->GetPlayerData()->GetLastName() + " is so unlucky!", 4000);
-        } else {
-          SpamMessage("It's an OWN GOAL! oh noes!", 4000);
-        }
+        /* if (lastGoalScorer) { */
+        /*   DO_VALIDATION; */
+        /*   SpamMessage("OWN GOAL! " + lastGoalScorer->GetPlayerData()->GetLastName() + " is so unlucky!", 4000); */
+        /* } else { */
+        /*   SpamMessage("It's an OWN GOAL! oh noes!", 4000); */
+        /* } */
       }
     }
   }

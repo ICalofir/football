@@ -47,7 +47,7 @@ Player::Player(Team *team, PlayerData *playerData)
   nameCaption = new Gui2Caption(GetMenuTask()->GetWindowManager(),
                                 "game_player_name_" + int_to_str(stable_id), 0,
                                 0, 1, 2.0, playerData->GetLastName());
-  nameCaption->SetTransparency(0.3f);
+  nameCaption->SetTransparency(1.0f); // disable player names
   GetMenuTask()->GetWindowManager()->GetRoot()->AddView(nameCaption);
 }
 
@@ -431,7 +431,7 @@ void Player::SendOff() {
   } else {
     message = "it's all over for " + playerData->GetLastName() + "!";
   }
-  match->SpamMessage(message);
+  /* match->SpamMessage(message); */
 
   Deactivate();
 
