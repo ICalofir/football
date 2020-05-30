@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 import time
+import pickle
 import numpy as np
 from absl import logging
 from PIL import Image
@@ -29,8 +30,6 @@ class SharedInfo():
 
         self._observations_path = os.path.join(self._dump_path, 'observations.json')
         self._observations = {}
-
-        self._frames = []
 
         self._real_steps = 0
 
@@ -87,7 +86,7 @@ class SharedInfo():
                 observation[team][now_player]['position_projected']['y'] = START_Y + player.projected_position[1] * Y_FIELD_SCALE * EFFECTIVE_Y * 0.01
 
         # general
-        observation['frame_name'] = 'frame_{}'.format(len(self._frames) - 1)
+        observation['frame_name'] = 'frame_{}'.format(self._real_steps // 10)
         observation['game_mode'] = shared_info.game_mode.name
         observation['is_in_play'] = shared_info.is_in_play
         observation['score'] = (shared_info.left_goals, shared_info.right_goals)
@@ -103,7 +102,8 @@ class SharedInfo():
         return observation
 
     def save_info(self, info, frame):
-        self._frames.append(frame)
+        with open(os.path.join(self._frames_path, 'frame_{}.pkl'.format(self._real_steps // 10)), 'wb') as f:
+            pickle.dump(frame, f)
 
         for shared_info in info.shared_info_frames:
             observation = self._get_observation(shared_info)
@@ -115,15 +115,6 @@ class SharedInfo():
             logging.info('Save info for frames at step: {}'.format(self._real_steps))
 
     def save_info_on_disk(self):
-        start_time = time.time()
-        for i, frame in enumerate(self._frames):
-            img = Image.fromarray(frame)
-            img.save(os.path.join(self._frames_path, 'frame_{}.png'.format(i)))
-
-            if i % 200 == 0:
-                logging.info('Frames: {}/{}'.format(i, len(self._frames)))
-        logging.info('Total elapsed time: {} s'.format(time.time() - start_time))
-
         json.dump(self._observations, open(self._observations_path, 'w'))
 
 def get_shared_info_object(dataset_path, save_info, render):
