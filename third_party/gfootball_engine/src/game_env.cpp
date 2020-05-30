@@ -445,15 +445,17 @@ void GameEnv::reset(ScenarioConfig& game_config, bool animations) {
 
   srand (time(NULL));
   int NUM_TEAMS = 6;
+  int team_left_database_id = -1, team_right_database_id = -1;
 
-  int team_left_database_id = rand() % NUM_TEAMS + 1;
-  int team_right_database_id = -1;
-  while (true) {
-    team_right_database_id = rand() % NUM_TEAMS + 1;
+  int league = (rand() % NUM_TEAMS + 1 + 1) / 2;
+  int swap = rand() % 2;
 
-    if (team_left_database_id != team_right_database_id) {
-      break;
-    }
+  if (swap) {
+    team_left_database_id = league * 2;
+    team_right_database_id = league * 2 - 1;
+  } else {
+    team_left_database_id = league * 2 - 1;
+    team_right_database_id = league * 2;
   }
 
   GetMenuTask()->SetMatchData(new MatchData(team_left_database_id, team_right_database_id));
