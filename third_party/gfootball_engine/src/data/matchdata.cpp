@@ -47,9 +47,9 @@ class PlayerDesc {
   int value_;
 };
 
-MatchData::MatchData()
-    : teamData{TeamData(3, GetScenarioConfig().left_team),
-               TeamData(8, GetScenarioConfig().right_team)} {
+MatchData::MatchData(int team_left_database_id, int team_right_database_id)
+    : team_left_database_id(team_left_database_id), team_right_database_id(team_right_database_id), teamData{TeamData(team_left_database_id, GetScenarioConfig().left_team),
+                                                                                                             TeamData(team_right_database_id, GetScenarioConfig().right_team)} {
   std::vector<PlayerDesc> names = {
       PlayerDesc("Ada", "Lovelace", 1),
       PlayerDesc("Alan", "Turing", 0),

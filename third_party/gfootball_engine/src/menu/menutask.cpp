@@ -80,8 +80,9 @@ MenuTask::MenuTask(float aspectRatio, float margin, TTF_Font *defaultFont,
   // 6 == man utd
   // 7 == psv
   // 8 == real madrid
-  queuedFixture.team1KitNum = 2;
-  queuedFixture.team2KitNum = 2;
+  srand (time(NULL));
+  queuedFixture.team1KitNum = rand() % 2 + 1;
+  queuedFixture.team2KitNum = 2 - queuedFixture.team1KitNum + 1;
 }
 
 MenuTask::~MenuTask() {

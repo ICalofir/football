@@ -27,7 +27,7 @@
 class MatchData {
 
   public:
-    MatchData();
+    MatchData(int team_left_database_id, int team_right_database_id);
     TeamData& GetTeamData(int id) { DO_VALIDATION; return teamData[id]; }
     int GetGoalCount(int id) { DO_VALIDATION; return goalCount[id]; }
     void SetGoalCount(int id, int amount) { DO_VALIDATION; goalCount[id] = amount; }
@@ -40,6 +40,8 @@ class MatchData {
     void ProcessState(EnvState* state, int first_team);
    protected:
     TeamData teamData[2];
+    int team_left_database_id;
+    int team_right_database_id;
 
     int goalCount[2];
 

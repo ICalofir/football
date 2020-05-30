@@ -442,7 +442,21 @@ void GameEnv::reset(ScenarioConfig& game_config, bool animations) {
   DO_VALIDATION;
   GetMenuTask()->GetWindowManager()->GetPagePath()->Clear();
   bool already_loaded = GetGameTask()->StopMatch();
-  GetMenuTask()->SetMatchData(new MatchData());
+
+  srand (time(NULL));
+  int NUM_TEAMS = 6;
+
+  int team_left_database_id = rand() % NUM_TEAMS + 1;
+  int team_right_database_id = -1;
+  while (true) {
+    team_right_database_id = rand() % NUM_TEAMS + 1;
+
+    if (team_left_database_id != team_right_database_id) {
+      break;
+    }
+  }
+
+  GetMenuTask()->SetMatchData(new MatchData(team_left_database_id, team_right_database_id));
   if (!already_loaded) {
     // We show loading page only the first time when env. is started.
     GetMenuTask()->GetWindowManager()->GetPageFactory()->CreatePage(1, 0);

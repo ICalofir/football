@@ -147,19 +147,51 @@ TeamData::TeamData(int teamDatabaseID, const std::vector<FormationEntry> &f) {
       "0.740000</position_offense_width_factor>";
   switch (teamDatabaseID) {
     DO_VALIDATION;
-    case 3:
-      name = "Frequentists United";
-      logo_url = "images_teams/primeradivision/fcbarcelona_logo.png";
-      kit_url = "images_teams/primeradivision/fcbarcelona";
-      shortName = "FRQ";
+    case 1:
+      name = "Bayern Munich";
+      logo_url = "images_teams/1bundesliga/bayernmunich_logo.png";
+      kit_url = "images_teams/1bundesliga/bayernmunich";
+      shortName = "BAY";
       color1 = Vector3(255, 100, 100);
       color2 = Vector3(100, 100, 255);
       break;
-    case 8:
-      name = "Real Bayesians";
+    case 2:
+      name = "Borussia Dortmund";
+      logo_url = "images_teams/1bundesliga/borussiadortmund_logo.png";
+      kit_url = "images_teams/1bundesliga/borussiadortmund";
+      shortName = "DOR";
+      color1 = Vector3(255, 255, 255);
+      color2 = Vector3(50, 50, 126);
+      break;
+    case 3:
+      name = "Arsenal";
+      logo_url = "images_teams/premierleague/arsenal_logo.png";
+      kit_url = "images_teams/premierleague/arsenal";
+      shortName = "ARS";
+      color1 = Vector3(255, 100, 100);
+      color2 = Vector3(100, 100, 255);
+      break;
+    case 4:
+      name = "Manchester United";
+      logo_url = "images_teams/premierleague/manchesterunited_logo.png";
+      kit_url = "images_teams/premierleague/manchesterunited";
+      shortName = "UNI";
+      color1 = Vector3(255, 255, 255);
+      color2 = Vector3(50, 50, 126);
+      break;
+    case 5:
+      name = "Barcelona";
+      logo_url = "images_teams/primeradivision/fcbarcelona_logo.png";
+      kit_url = "images_teams/primeradivision/fcbarcelona";
+      shortName = "BAR";
+      color1 = Vector3(255, 100, 100);
+      color2 = Vector3(100, 100, 255);
+      break;
+    case 6:
+      name = "Real Madrid";
       logo_url = "images_teams/primeradivision/realmadrid_logo.png";
       kit_url = "images_teams/primeradivision/realmadrid";
-      shortName = "RBA";
+      shortName = "REA";
       color1 = Vector3(255, 255, 255);
       color2 = Vector3(50, 50, 126);
       break;
