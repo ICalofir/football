@@ -1,0 +1,1 @@
+python -m gfootball.play_game --action_set=full --players="ppo2_cnn:left_players=1,policy=gfootball_impala_cnn,checkpoint=/home/ionutc/Downloads/11_vs_11_easy_stochastic_v2;bot:right_players=1" --level=11_vs_11_hard_stochastic
